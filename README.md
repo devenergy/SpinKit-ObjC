@@ -18,6 +18,22 @@ Available styles:
 * `RTSpinKitViewStyleWave`
 * `RTSpinKitViewStyleWanderingCubes`
 * `RTSpinKitViewStylePulse`
+ 
+You can user static helpers:
+
+    [RTSpinKitView showIn:self.view withStyle:RTSpinKitViewStyleWave andColor:[UIColor whiteColor]];
+    [RTSpinKitView hideIn:self.view];
+
+Also you can set style and color across your application with Apperance proxy:
+
+    // setup in AppDelegate 
+    [RTSpinKitView appearance].color = [UIColor whiteColor];
+    [RTSpinKitView appearance].style = RTSpinKitViewStyleWave;
+    ...
+    // use anyway one-style spinner
+    [RTSpinKitView showIn:self.view];
+    
+
 
 MBProgressHUD
 -------------
