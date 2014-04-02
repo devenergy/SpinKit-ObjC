@@ -18,8 +18,18 @@ typedef NS_ENUM(NSInteger, RTSpinKitViewStyle) {
 
 @interface RTSpinKitView : UIView
 
-@property (nonatomic, strong) UIColor *color;
+@property (nonatomic, strong) UIColor *color UI_APPEARANCE_SELECTOR;
+@property (nonatomic, assign) RTSpinKitViewStyle style UI_APPEARANCE_SELECTOR;
 @property (nonatomic, assign) BOOL hidesWhenStopped;
+
+// show with settings, which you can set withing appearance proxy
+// fe [RTSpinKitView appearance].style = RTSpinKitViewStyleBounce;
+//    [RTSpinKitView appearance].color = [UIColor whiteColor];
++(instancetype)showIn:(UIView*)view;
+// create and show spinner in specific view
++(instancetype)showIn:(UIView*)view withStyle:(RTSpinKitViewStyle)style andColor:(UIColor*) color;
+// find and hide spinner in specific view
++(void)hideIn:(UIView*)view;
 
 -(instancetype)initWithStyle:(RTSpinKitViewStyle)style;
 -(instancetype)initWithStyle:(RTSpinKitViewStyle)style color:(UIColor*)color;

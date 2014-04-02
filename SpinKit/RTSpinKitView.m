@@ -24,11 +24,41 @@ static CATransform3D RTSpinKit3DRotationWithPerspective(CGFloat perspective,
 }
 
 @interface RTSpinKitView ()
-@property (nonatomic, assign) RTSpinKitViewStyle style;
 @property (nonatomic, assign, getter = isStopped) BOOL stopped;
 @end
 
+
 @implementation RTSpinKitView
+
+// show with settings, which you can set withing appearance proxy
+// fe [RTSpinKitView appearance].style = RTSpinKitViewStyleBounce;
+//    [RTSpinKitView appearance].color = [UIColor whiteColor];
++(instancetype)showIn:(UIView*)view {
+  if (![RTSpinKitView appearance].color) [RTSpinKitView appearance].color = [UIColor blackColor];
+  return [RTSpinKitView showIn:view
+                     withStyle:[RTSpinKitView appearance].style
+                      andColor:[RTSpinKitView appearance].color];
+}
+
+// create and show spinner in specific view
++(instancetype)showIn:(UIView*)view withStyle:(RTSpinKitViewStyle)style andColor:(UIColor*) color {
+  RTSpinKitView* spinner = [[RTSpinKitView alloc] initWithStyle:style color:color];
+  // show spinner in the superview center
+  spinner.center = CGPointMake(CGRectGetMidX(view.bounds), CGRectGetMidY(view.bounds));
+  spinner.hidesWhenStopped = YES;
+  [spinner startAnimating];
+  [view addSubview:spinner];
+  return spinner;
+}
+
+// find and hide spinner in specific view
++(void)hideIn:(UIView*) view {
+  for (UIView* sub in view.subviews) {
+    if ([sub isKindOfClass:[RTSpinKitView class]]) {
+      [sub removeFromSuperview];
+    }
+  }
+}
 
 -(instancetype)initWithStyle:(RTSpinKitViewStyle)style {
     return [self initWithStyle:style color:[UIColor grayColor]];
@@ -38,7 +68,7 @@ static CATransform3D RTSpinKit3DRotationWithPerspective(CGFloat perspective,
     self = [super init];
     if (self) {
         _style = style;
-        _color = color;
+        [self setColor:color];
         _hidesWhenStopped = YES;
 
         [self sizeToFit];
