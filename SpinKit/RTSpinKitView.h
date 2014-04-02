@@ -26,8 +26,14 @@ typedef NS_ENUM(NSInteger, RTSpinKitViewStyle) {
 // fe [RTSpinKitView appearance].style = RTSpinKitViewStyleBounce;
 //    [RTSpinKitView appearance].color = [UIColor whiteColor];
 +(instancetype)showIn:(UIView*)view;
+
+// show with color settings, which you can set withing appearance proxy
+// fe [RTSpinKitView appearance].color = [UIColor whiteColor];
++(instancetype)showIn:(UIView*)view withStyle:(RTSpinKitViewStyle)style;
+
 // create and show spinner in specific view
 +(instancetype)showIn:(UIView*)view withStyle:(RTSpinKitViewStyle)style andColor:(UIColor*) color;
+
 // find and hide spinner in specific view
 +(void)hideIn:(UIView*)view;
 

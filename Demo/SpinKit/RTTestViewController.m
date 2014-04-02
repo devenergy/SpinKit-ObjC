@@ -15,7 +15,7 @@
 
 @implementation RTTestViewController
 
--(void)insertSpinner:(RTSpinKitView*)spinner
+-(void)insertSpinner:(RTSpinKitViewStyle)style
              atIndex:(NSInteger)index
      backgroundColor:(UIColor*)backgroundColor
 {
@@ -24,17 +24,18 @@
     
     UIView *panel = [[UIView alloc] initWithFrame:CGRectOffset(screenBounds, screenWidth * index, 0.0)];
     panel.backgroundColor = backgroundColor;
-
-    spinner.center = CGPointMake(CGRectGetMidX(screenBounds), CGRectGetMidY(screenBounds));
-    [spinner startAnimating];
-
-    [panel addSubview:spinner];
+  
+    [RTSpinKitView showIn:panel withStyle:style]; // or you can use showIn:(UIView*)view withStyle:(RTSpinKitViewStyle)style andColor:(UIColor*) color
 
     UIScrollView *scrollView = (UIScrollView*)self.view;
     [scrollView addSubview:panel];
 }
 
 -(void)loadView {
+    // you can set params with Appearance proxy
+    // [RTSpinKitView appearance].style for cross application spinner
+    [RTSpinKitView appearance].color = [UIColor whiteColor];
+  
     UIScrollView *scrollView = [[UIScrollView alloc] init];
     scrollView.pagingEnabled = YES;
     scrollView.alwaysBounceVertical = NO;
@@ -42,23 +43,23 @@
     scrollView.backgroundColor = [UIColor darkGrayColor];
     self.view = scrollView;
 
-    [self insertSpinner:[[RTSpinKitView alloc] initWithStyle:RTSpinKitViewStylePlane color:[UIColor whiteColor]]
+    [self insertSpinner:RTSpinKitViewStylePlane
                 atIndex:0
         backgroundColor:[UIColor colorWithRed:0.827 green:0.329 blue:0 alpha:1.0]];
 
-    [self insertSpinner:[[RTSpinKitView alloc] initWithStyle:RTSpinKitViewStyleBounce color:[UIColor whiteColor]]
+    [self insertSpinner:RTSpinKitViewStyleBounce
                 atIndex:1
         backgroundColor:[UIColor colorWithRed:0.173 green:0.243 blue:0.314 alpha:1.0]];
 
-    [self insertSpinner:[[RTSpinKitView alloc] initWithStyle:RTSpinKitViewStyleWave color:[UIColor whiteColor]]
+    [self insertSpinner:RTSpinKitViewStyleWave
                 atIndex:2
         backgroundColor:[UIColor colorWithRed:0.102 green:0.737 blue:0.612 alpha:1.0]];
 
-    [self insertSpinner:[[RTSpinKitView alloc] initWithStyle:RTSpinKitViewStyleWanderingCubes color:[UIColor whiteColor]]
+    [self insertSpinner:RTSpinKitViewStyleWanderingCubes
                 atIndex:3
         backgroundColor:[UIColor colorWithRed:0.161 green:0.502 blue:0.725 alpha:1.0]];
 
-    [self insertSpinner:[[RTSpinKitView alloc] initWithStyle:RTSpinKitViewStylePulse color:[UIColor whiteColor]]
+    [self insertSpinner:RTSpinKitViewStylePulse
                 atIndex:4
         backgroundColor:[UIColor colorWithRed:0.498 green:0.549 blue:0.553 alpha:1.0]];
 

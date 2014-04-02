@@ -40,6 +40,15 @@ static CATransform3D RTSpinKit3DRotationWithPerspective(CGFloat perspective,
                       andColor:[RTSpinKitView appearance].color];
 }
 
+// show with color settings, which you can set withing appearance proxy
+// fe [RTSpinKitView appearance].color = [UIColor whiteColor];
++(instancetype)showIn:(UIView*)view withStyle:(RTSpinKitViewStyle)style {
+  if (![RTSpinKitView appearance].color) [RTSpinKitView appearance].color = [UIColor blackColor];
+  return [RTSpinKitView showIn:view
+                     withStyle:style
+                      andColor:[RTSpinKitView appearance].color];
+}
+
 // create and show spinner in specific view
 +(instancetype)showIn:(UIView*)view withStyle:(RTSpinKitViewStyle)style andColor:(UIColor*) color {
   RTSpinKitView* spinner = [[RTSpinKitView alloc] initWithStyle:style color:color];
