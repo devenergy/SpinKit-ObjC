@@ -19,8 +19,19 @@ typedef NS_ENUM(NSInteger, RTSpinKitViewStyle) {
 @interface RTSpinKitView : UIView
 
 @property (nonatomic, strong) UIColor *color UI_APPEARANCE_SELECTOR;
+// this property is using through appearance proxy only 
+@property (nonatomic, strong) UIColor *overlayColor UI_APPEARANCE_SELECTOR;
 @property (nonatomic, assign) RTSpinKitViewStyle style UI_APPEARANCE_SELECTOR;
 @property (nonatomic, assign) BOOL hidesWhenStopped;
+
+// show overlay with specific alpha, getting color and style from appearance proxy
++(instancetype)showOverlay:(float)alpha;
+
+// show overlay with specific alpha, colored and styled spinner as subview
++(instancetype)showOverlay:(float)alpha withStyle:(RTSpinKitViewStyle)style andColor:(UIColor*) color;
+
+// hide overlay view with spinner
++(void)hideOverlay;
 
 // show with settings, which you can set withing appearance proxy
 // fe [RTSpinKitView appearance].style = RTSpinKitViewStyleBounce;

@@ -27,8 +27,31 @@ static CATransform3D RTSpinKit3DRotationWithPerspective(CGFloat perspective,
 @property (nonatomic, assign, getter = isStopped) BOOL stopped;
 @end
 
+static int SPIN_OVERLAY_TAG = 1111;
 
 @implementation RTSpinKitView
+
+// show overlay with specific alpha, getting color and style from appearance proxy
++(instancetype)showOverlay:(float)alpha {
+  if (![RTSpinKitView appearance].color) [RTSpinKitView appearance].color = [UIColor blackColor];
+  return [RTSpinKitView showOverlay:alpha withStyle:[RTSpinKitView appearance].style andColor:[RTSpinKitView appearance].color];
+}
+
+// show overlay with specific alpha, colored and styled spinner as subview
++(instancetype)showOverlay:(float)alpha withStyle:(RTSpinKitViewStyle)style andColor:(UIColor*) color {
+  UIWindow* window = [[UIApplication sharedApplication] keyWindow];
+  UIView* overlay = [UIView new];
+  overlay.tag = SPIN_OVERLAY_TAG;
+  overlay.frame = window.frame;
+  overlay.alpha = alpha;
+  UIColor* overlayColor = [RTSpinKitView appearance].overlayColor;
+  if (!overlayColor) overlayColor = [UIColor blackColor];
+  // get color from appearance proxy 
+  overlay.backgroundColor = overlayColor;
+  [window addSubview:overlay];
+  // add as window child to prevent alpha influence
+  return [RTSpinKitView showIn:window];
+}
 
 // show with settings, which you can set withing appearance proxy
 // fe [RTSpinKitView appearance].style = RTSpinKitViewStyleBounce;
@@ -58,6 +81,16 @@ static CATransform3D RTSpinKit3DRotationWithPerspective(CGFloat perspective,
   [spinner startAnimating];
   [view addSubview:spinner];
   return spinner;
+}
+
+// hide overlay view with spinner
++(void)hideOverlay {
+  UIWindow* window = [[UIApplication sharedApplication] keyWindow];
+  for (UIView* sub in window.subviews) {
+    if (sub.tag == SPIN_OVERLAY_TAG || [sub isKindOfClass:[RTSpinKitView class]]) {
+      [sub removeFromSuperview];
+    }
+  }
 }
 
 // find and hide spinner in specific view

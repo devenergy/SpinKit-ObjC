@@ -34,7 +34,9 @@
 -(void)loadView {
     // you can set params with Appearance proxy
     // [RTSpinKitView appearance].style for cross application spinner
+    [RTSpinKitView appearance].overlayColor = [UIColor whiteColor];
     [RTSpinKitView appearance].color = [UIColor whiteColor];
+    [RTSpinKitView appearance].style = RTSpinKitViewStyleWave;
   
     UIScrollView *scrollView = [[UIScrollView alloc] init];
     scrollView.pagingEnabled = YES;
@@ -42,29 +44,6 @@
     scrollView.alwaysBounceHorizontal = YES;
     scrollView.backgroundColor = [UIColor darkGrayColor];
     self.view = scrollView;
-
-    [self insertSpinner:RTSpinKitViewStylePlane
-                atIndex:0
-        backgroundColor:[UIColor colorWithRed:0.827 green:0.329 blue:0 alpha:1.0]];
-
-    [self insertSpinner:RTSpinKitViewStyleBounce
-                atIndex:1
-        backgroundColor:[UIColor colorWithRed:0.173 green:0.243 blue:0.314 alpha:1.0]];
-
-    [self insertSpinner:RTSpinKitViewStyleWave
-                atIndex:2
-        backgroundColor:[UIColor colorWithRed:0.102 green:0.737 blue:0.612 alpha:1.0]];
-
-    [self insertSpinner:RTSpinKitViewStyleWanderingCubes
-                atIndex:3
-        backgroundColor:[UIColor colorWithRed:0.161 green:0.502 blue:0.725 alpha:1.0]];
-
-    [self insertSpinner:RTSpinKitViewStylePulse
-                atIndex:4
-        backgroundColor:[UIColor colorWithRed:0.498 green:0.549 blue:0.553 alpha:1.0]];
-
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    scrollView.contentSize = CGSizeMake(5 * CGRectGetWidth(screenBounds), CGRectGetHeight(screenBounds));
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle {
@@ -75,6 +54,36 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+  [RTSpinKitView showOverlay:0.5f];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+      [RTSpinKitView hideOverlay];
+      
+      [self insertSpinner:RTSpinKitViewStylePlane
+                  atIndex:0
+          backgroundColor:[UIColor colorWithRed:0.827 green:0.329 blue:0 alpha:1.0]];
+      
+      [self insertSpinner:RTSpinKitViewStyleBounce
+                  atIndex:1
+          backgroundColor:[UIColor colorWithRed:0.173 green:0.243 blue:0.314 alpha:1.0]];
+      
+      [self insertSpinner:RTSpinKitViewStyleWave
+                  atIndex:2
+          backgroundColor:[UIColor colorWithRed:0.102 green:0.737 blue:0.612 alpha:1.0]];
+      
+      [self insertSpinner:RTSpinKitViewStyleWanderingCubes
+                  atIndex:3
+          backgroundColor:[UIColor colorWithRed:0.161 green:0.502 blue:0.725 alpha:1.0]];
+      
+      [self insertSpinner:RTSpinKitViewStylePulse
+                  atIndex:4
+          backgroundColor:[UIColor colorWithRed:0.498 green:0.549 blue:0.553 alpha:1.0]];
+      
+      CGRect screenBounds = [[UIScreen mainScreen] bounds];
+      ((UIScrollView*) self.view).contentSize = CGSizeMake(5 * CGRectGetWidth(screenBounds), CGRectGetHeight(screenBounds));
+    });
 }
 
 - (void)didReceiveMemoryWarning
