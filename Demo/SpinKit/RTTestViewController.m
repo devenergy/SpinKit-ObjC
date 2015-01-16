@@ -10,97 +10,126 @@
 #import "RTSpinKitView.h"
 
 @interface RTTestViewController ()
-
+@property (nonatomic, assign) NSInteger numberOfSpinners;
 @end
 
 @implementation RTTestViewController
-
--(void)insertSpinner:(RTSpinKitViewStyle)style
-             atIndex:(NSInteger)index
-     backgroundColor:(UIColor*)backgroundColor
-{
-    CGRect screenBounds = [[UIScreen mainScreen] bounds];
-    CGFloat screenWidth = CGRectGetWidth(screenBounds);
-    
-    UIView *panel = [[UIView alloc] initWithFrame:CGRectOffset(screenBounds, screenWidth * index, 0.0)];
-    panel.backgroundColor = backgroundColor;
   
-    [RTSpinKitView showIn:panel withStyle:style]; // or you can use showIn:(UIView*)view withStyle:(RTSpinKitViewStyle)style andColor:(UIColor*) color
-
-    UIScrollView *scrollView = (UIScrollView*)self.view;
-    [scrollView addSubview:panel];
-}
-
 -(void)loadView {
-    // you can set params with Appearance proxy
-    // [RTSpinKitView appearance].style for cross application spinner
-    [RTSpinKitView appearance].overlayColor = [UIColor whiteColor];
-    [RTSpinKitView appearance].color = [UIColor whiteColor];
-    [RTSpinKitView appearance].style = RTSpinKitViewStyleWave;
-  
+    self.numberOfSpinners = 0;
+
     UIScrollView *scrollView = [[UIScrollView alloc] init];
     scrollView.pagingEnabled = YES;
     scrollView.alwaysBounceVertical = NO;
     scrollView.alwaysBounceHorizontal = YES;
+    scrollView.directionalLockEnabled = YES;
     scrollView.backgroundColor = [UIColor darkGrayColor];
     self.view = scrollView;
+
+    [self insertSpinnerOfStyle: RTSpinKitViewStylePlane
+               backgroundColor:[UIColor colorWithRed:0.827 green:0.329 blue:0 alpha:1.0]
+                         label:@"Plane"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleBounce
+               backgroundColor:[UIColor colorWithRed:0.173 green:0.243 blue:0.314 alpha:1.0]
+                         label:@"Bounce"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleWave
+               backgroundColor:[UIColor colorWithRed:0.102 green:0.737 blue:0.612 alpha:1.0]
+                         label:@"Wave"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleWanderingCubes
+               backgroundColor:[UIColor colorWithRed:0.161 green:0.502 blue:0.725 alpha:1.0]
+                         label:@"WanderingCubes"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStylePulse
+               backgroundColor:[UIColor colorWithRed:0.498 green:0.549 blue:0.553 alpha:1.0]
+                         label:@"Pulse"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleCircleFlip
+               backgroundColor:[UIColor colorWithWhite:0.200 alpha:1.000]
+                         label:@"CircleFlip"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleChasingDots
+               backgroundColor:[UIColor colorWithRed:0.95 green:0.77 blue:0.06 alpha:1.0]
+                         label:@"ChasingDots"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleThreeBounce
+               backgroundColor:[UIColor colorWithRed:0.83 green:0.33 blue:0.0 alpha:1.0]
+                         label:@"ThreeBounce"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleCircle
+               backgroundColor:[UIColor colorWithRed:0.15 green:0.68 blue:0.38 alpha:1.0]
+                         label:@"Circle"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyle9CubeGrid
+               backgroundColor:[UIColor colorWithRed:0.68 green:0.15 blue:0.47 alpha:1.0]
+                         label:@"9CubeGrid"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleWordPress
+               backgroundColor:[UIColor colorWithRed:0.08 green:0.57 blue:0.86 alpha:1.0]
+                         label:@"WordPress"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleFadingCircle
+               backgroundColor:[UIColor colorWithRed:0.0 green:0.60 blue:0.24 alpha:1.0]
+                         label:@"FadingCircle"];
+    
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleFadingCircleAlt
+               backgroundColor:[UIColor colorWithRed:0.60 green:0.0 blue:0.0 alpha:1.0]
+                         label:@"FadingCircleAlt"];
+
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleArc
+               backgroundColor:[UIColor colorWithRed:0.56 green:0.27 blue:0.68 alpha:1.0]
+                         label:@"Arc"];
+
+    [self insertSpinnerOfStyle: RTSpinKitViewStyleArcAlt
+               backgroundColor:[UIColor colorWithRed:0.91 green:0.3 blue:0.24 alpha:1.0]
+                         label:@"ArcAlt"];
+
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    scrollView.contentSize = CGSizeMake(self.numberOfSpinners * CGRectGetWidth(screenBounds), CGRectGetHeight(screenBounds));
 }
 
 -(UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleLightContent;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+-(void)insertSpinnerOfStyle:(RTSpinKitViewStyle)style
+            backgroundColor:(UIColor*)backgroundColor
+                      label:(NSString *)labelString {
+    CGRect screenBounds = [[UIScreen mainScreen] bounds];
+    CGFloat screenWidth = CGRectGetWidth(screenBounds);
+    
+    RTSpinKitView *spinner = [[RTSpinKitView alloc] initWithStyle:style color:[UIColor whiteColor]];
+    
+    spinner.center = CGPointMake(CGRectGetMidX(screenBounds), CGRectGetMidY(screenBounds));
+    [spinner startAnimating];
+    
+    UIView *panel = [[UIView alloc] initWithFrame:CGRectOffset(screenBounds, screenWidth * self.numberOfSpinners, 0.0)];
+    panel.backgroundColor = backgroundColor;
+    [panel addSubview:spinner];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 50.0, screenWidth, 30.0)];
+    label.text = labelString;
+    label.font = [UIFont systemFontOfSize:25.0];
+    label.textColor = [UIColor whiteColor];
+    
+    if ([label respondsToSelector:@selector(tintColor)]) {
+        label.textAlignment = NSTextAlignmentCenter;
+    } else {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+        label.textAlignment = UITextAlignmentCenter;
+#pragma GCC diagnostic pop
+        label.backgroundColor = [UIColor clearColor];
+    }
+    
+    [panel addSubview:label];
+    
+    UIScrollView *scrollView = (UIScrollView*)self.view;
+    [scrollView addSubview:panel];
+    
+    self.numberOfSpinners += 1;
 }
-
--(void)viewDidAppear:(BOOL)animated {
-  [RTSpinKitView showOverlay:0.5f];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-      [RTSpinKitView hideOverlay];
-      
-      [self insertSpinner:RTSpinKitViewStylePlane
-                  atIndex:0
-          backgroundColor:[UIColor colorWithRed:0.827 green:0.329 blue:0 alpha:1.0]];
-      
-      [self insertSpinner:RTSpinKitViewStyleBounce
-                  atIndex:1
-          backgroundColor:[UIColor colorWithRed:0.173 green:0.243 blue:0.314 alpha:1.0]];
-      
-      [self insertSpinner:RTSpinKitViewStyleWave
-                  atIndex:2
-          backgroundColor:[UIColor colorWithRed:0.102 green:0.737 blue:0.612 alpha:1.0]];
-      
-      [self insertSpinner:RTSpinKitViewStyleWanderingCubes
-                  atIndex:3
-          backgroundColor:[UIColor colorWithRed:0.161 green:0.502 blue:0.725 alpha:1.0]];
-      
-      [self insertSpinner:RTSpinKitViewStylePulse
-                  atIndex:4
-          backgroundColor:[UIColor colorWithRed:0.498 green:0.549 blue:0.553 alpha:1.0]];
-      
-      CGRect screenBounds = [[UIScreen mainScreen] bounds];
-      ((UIScrollView*) self.view).contentSize = CGSizeMake(5 * CGRectGetWidth(screenBounds), CGRectGetHeight(screenBounds));
-    });
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
